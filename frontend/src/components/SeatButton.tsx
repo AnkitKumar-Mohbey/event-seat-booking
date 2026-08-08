@@ -26,7 +26,7 @@ type Props = {
 
 export function SeatButton({ seat, isSelected, onToggle }: Props) {
   const state = getState(seat, isSelected);
-  const disabled = state === "booked" || state === "blocked";
+  const disabled = state === "booked";
 
   return (
     <button

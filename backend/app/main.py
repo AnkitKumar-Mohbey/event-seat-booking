@@ -7,6 +7,7 @@ from app.config import settings
 from app.database import engine
 from app.models import Base
 from app.routers import events, bookings
+from app.routers import events, bookings, admin
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -32,6 +33,7 @@ app.add_middleware(
 
 app.include_router(events.router)
 app.include_router(bookings.router)
+app.include_router(admin.router)
 
 @app.get("/health", tags=["meta"])
 def health():

@@ -6,12 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import engine
 from app.models import Base
-
+from app.routers import events, bookings
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    # Dev convenience: ensure tables exist on startup.
-    # Production migrations would use Alembic; out of scope here.
     Base.metadata.create_all(engine)
     yield
 
@@ -32,6 +30,10 @@ app.add_middleware(
 )
 
 
+app.include_router(events.router)
+app.include_router(bookings.router)
+
 @app.get("/health", tags=["meta"])
 def health():
     return {"status": "ok"}
+

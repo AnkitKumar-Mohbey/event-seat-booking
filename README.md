@@ -65,7 +65,9 @@ Row-level locking gives the same guarantee, but adds complexity (lock ordering, 
 
 ### Proof
 
-`backend/tests/concurrency_test.sh` fires two `POST /bookings` requests for the same seat in parallel. Sample run:
+Two test harnesses ship with the repo:
+
+**Shell test** — `backend/tests/concurrency_test.sh` fires two parallel `POST /bookings` requests via `curl` background jobs. Sample run:
 
 ```
 Firing two concurrent bookings for seat_id=15 ...
@@ -76,6 +78,20 @@ booked_seats=1, bookings=[{...single booking...}]
 ```
 
 Exactly one request wins; the other is rejected cleanly.
+
+
+**Python load test** — `backend/tests/concurrency_load_test.py` uses `threading.Barrier` to release requests truly simultaneously and asserts three invariants against the live backend:
+
+1. **10 users, same seat** → exactly 1 × 201, 9 × 409.
+2. **Overlapping multi-seat** (Alice `[a,b,c]` vs Bob `[c,d,e]`) → one wins all, the other gets 409 with zero partial writes.
+3. **10 users, 10 different seats** → all succeed (no false conflicts).
+
+Run it:
+
+```bash
+python3 backend/tests/concurrency_load_test.py                     # against live prod
+API_URL=http://127.0.0.1:8000 python3 backend/tests/concurrency_load_test.py  # local
+```
 
 ## Schema design decisions
 

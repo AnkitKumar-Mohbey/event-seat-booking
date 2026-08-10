@@ -1,26 +1,22 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-venv/
-.env
 
-# Node
-node_modules/
-.next/
-.env.local
-.env*.local
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
+build/
 # Build artifacts
 dist/
-build/
+.DS_Store
 *.egg-info/
 .env
+.env*.local
+.env.local
+# IDE
+.idea/
+.next/
+# Node
+node_modules/
+# OS
+*.pyc
+__pycache__/
+*.pyo
+# Python
+Thumbs.db
+venv/
+.vscode/
